@@ -138,6 +138,7 @@ class MentionTagTextFormField extends TextFormField {
     TextEditingController? controller,
     this.initialMentions = const [],
     this.onMention,
+    this.onMentionDetected,
     this.mentionTagDecoration = const MentionTagDecoration(),
     super.initialValue,
     super.focusNode,
@@ -215,8 +216,9 @@ class MentionTagTextFormField extends TextFormField {
             onChanged: (value) {
               if (controller is MentionTagTextEditingController?) {
                 try {
-                  controller?.onChanged(value, extraFunc: onChanged);
-                  // onChanged?.call(value);
+                  controller?.onChanged(value,
+                      onMentionDetected: onMentionDetected);
+                  onChanged?.call(value);
                 } catch (e, s) {
                   debugPrint(e.toString());
                   debugPrint(s.toString());
@@ -244,6 +246,8 @@ class MentionTagTextFormField extends TextFormField {
   /// Note: While setting initialMentions you must provide mention symbol associated with each mention. For example, ("@rowan", null) is a valid tuple and ("rowan", null) will be ignored.
   /// You don't need to add mention symbol later when setting mentions during editing using _controller.setMention, you can do _controller.setMention("rowan", null) and corresponding mention symbol will be added automatically.
   final List<(String, Object?, Widget?)> initialMentions;
+
+  final Function()? onMentionDetected;
 
   static Widget _defaultContextMenuBuilder(
       BuildContext context, EditableTextState editableTextState) {

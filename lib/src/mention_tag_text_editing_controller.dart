@@ -183,16 +183,16 @@ class MentionTagTextEditingController extends TextEditingController {
     _mentionInput = mention;
   }
 
-  void onChanged(String value, {Function(String)? extraFunc}) async {
+  void onChanged(String value, {Function()? onMentionDetected}) async {
     if (onMention == null) return;
     String? mention = _getMention(value);
+    if (mention != null && onMentionDetected != null) {
+      onMentionDetected();
+    }
     _updateOnMention(mention);
 
     if (value.length < _temp.length) {
       _updadeMentions(value);
-    }
-    if (extraFunc != null) {
-      extraFunc(value);
     }
     _temp = value;
   }
