@@ -183,7 +183,7 @@ class MentionTagTextEditingController extends TextEditingController {
     _mentionInput = mention;
   }
 
-  void onChanged(String value) async {
+  void onChanged(String value, {Function(String)? extraFunc}) async {
     if (onMention == null) return;
     String? mention = _getMention(value);
     _updateOnMention(mention);
@@ -191,7 +191,9 @@ class MentionTagTextEditingController extends TextEditingController {
     if (value.length < _temp.length) {
       _updadeMentions(value);
     }
-
+    if (extraFunc != null) {
+      extraFunc(value);
+    }
     _temp = value;
   }
 

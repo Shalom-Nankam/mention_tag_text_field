@@ -215,8 +215,8 @@ class MentionTagTextFormField extends TextFormField {
             onChanged: (value) {
               if (controller is MentionTagTextEditingController?) {
                 try {
-                  controller?.onChanged(value);
-                  onChanged?.call(value);
+                  controller?.onChanged(value, extraFunc: onChanged);
+                  // onChanged?.call(value);
                 } catch (e, s) {
                   debugPrint(e.toString());
                   debugPrint(s.toString());
