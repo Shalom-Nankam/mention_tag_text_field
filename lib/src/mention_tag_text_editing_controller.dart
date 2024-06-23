@@ -7,6 +7,15 @@ import 'package:mention_tag_text_field/src/string_extensions.dart';
 class MentionTagTextEditingController extends TextEditingController {
   final List<MentionTagElement> _mentions = [];
 
+  String formattedText() {
+    var joinedString = mentions.join('|').replaceAll('@', '');
+    return text.replaceAllMapped(
+        RegExp('@\\b(?:$joinedString)\\b'), (m) => " `${m[0]}`");
+  }
+
+  bool mentionedSomething(String something) =>
+      _mentions.any((mention) => mention.mention == something);
+
   /// Get the list of data associated with you mentions, if no data was given the mention labels will be returned.
   List get mentions =>
       List.from(_mentions.map((mention) => mention.data ?? mention.mention));
@@ -183,11 +192,14 @@ class MentionTagTextEditingController extends TextEditingController {
     _mentionInput = mention;
   }
 
-  void onChanged(String value, {Function()? onMentionDetected}) async {
+  void onChanged(String value,
+      {Function()? onMentionDetected, Function()? onMentionNotDetected}) async {
     if (onMention == null) return;
     String? mention = _getMention(value);
     if (mention != null && onMentionDetected != null) {
       onMentionDetected();
+    } else {
+      onMentionNotDetected?.call();
     }
     _updateOnMention(mention);
 

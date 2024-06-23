@@ -139,6 +139,7 @@ class MentionTagTextFormField extends TextFormField {
     this.initialMentions = const [],
     this.onMention,
     this.onMentionDetected,
+    this.onMentionNotDetected,
     this.mentionTagDecoration = const MentionTagDecoration(),
     super.initialValue,
     super.focusNode,
@@ -217,7 +218,8 @@ class MentionTagTextFormField extends TextFormField {
               if (controller is MentionTagTextEditingController?) {
                 try {
                   controller?.onChanged(value,
-                      onMentionDetected: onMentionDetected);
+                      onMentionDetected: onMentionDetected,
+                      onMentionNotDetected: onMentionNotDetected);
                   onChanged?.call(value);
                 } catch (e, s) {
                   debugPrint(e.toString());
@@ -248,6 +250,7 @@ class MentionTagTextFormField extends TextFormField {
   final List<(String, Object?, Widget?)> initialMentions;
 
   final Function()? onMentionDetected;
+  final Function()? onMentionNotDetected;
 
   static Widget _defaultContextMenuBuilder(
       BuildContext context, EditableTextState editableTextState) {
